@@ -1,8 +1,11 @@
 source /reg/g/psdm/etc/psconda.sh
 
+# find available nodes
 NODES=`wherepsana`
+# get name of first node
 IND=$((`expr index "$NODES" ,`-1))
 NODE1=`expr substr $NODES 1 $IND`
+# get number of cores (nodes*8)
 RES="${NODES//[^,]}"
 NUM=$(((${#RES}+1)*8))
 echo $NODES

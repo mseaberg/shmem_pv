@@ -27,10 +27,11 @@ def runclient(args,pars,comm,rank,size):
     detName = pars['detName']
     thresh = pars['thresh']
     ipm_threshold = pars['ipm_threshold']
+    ipmName = pars['ipmName']
 
 
     expName = expName
-    update = pars['update_events']
+    update_events = pars['update_events']
     runString = 'exp=%s:run=%s:smd' % (expName, runNum)
     #runString = runNum
     #runString += ':dir=/reg/d/ffb/%s/%s/xtc:live' % (hutchName,expName)
@@ -64,7 +65,7 @@ def runclient(args,pars,comm,rank,size):
         ds = psana.DataSource(runString)
 
     det0 = psana.Detector(detName)
-    ipm4 = psana.Detector('XCS-SB1-BMMON')
+    ipm = psana.Detector(ipmName)
 
     nevents = np.empty(0)
 
@@ -72,7 +73,7 @@ def runclient(args,pars,comm,rank,size):
 #    md = mpidata()
 
     # initialize i1 (which resets after each update) depending on the rank of the process
-    i1 = int((rank-1)*update/(size-1))
+    i1 = int((rank-1)*update_events/(size-1))
 
 
     md = mpidata()
@@ -101,7 +102,7 @@ def runclient(args,pars,comm,rank,size):
         #print(evt.keys())
 
         # send mpi data object to master when desired
-        if i1 == update:
+        if i1 == update_events:
 
             md=mpidata()
 
@@ -109,7 +110,7 @@ def runclient(args,pars,comm,rank,size):
             i1 = 0
             #print(i1)
             if det0.image(evt) is None: continue
-            if ipm4.get(evt) is None: continue
+            if ipm.get(evt) is None: continue
 
 
             print(nevent)
@@ -118,7 +119,7 @@ def runclient(args,pars,comm,rank,size):
             #img0 = np.copy(det0.image(evt)[ymin:ymax,xmin:xmax])
             print('getting image')
             img0 = det0.image(evt)
-            norm = ipm4.get(evt).TotalIntensity()
+            norm = ipm.get(evt).TotalIntensity()
             #img0[img0<20] = 0
             #img0 -= 20
             #img0[img0<20] = 0
@@ -155,7 +156,7 @@ def runclient(args,pars,comm,rank,size):
 
             intensity = np.sum(img1)/norm
             #intensity = np.mean(img1)
-            # require ipm4 to be larger than some number (default 50)
+            # require ipm to be larger than some number (default 50)
             if norm<ipm_threshold:
                 #pass
                 intensity = np.array(np.nan)
@@ -167,7 +168,7 @@ def runclient(args,pars,comm,rank,size):
             md.addarray('cy',cy)
             md.addarray('wx',wx)
             md.addarray('wy',wy)
-            # normalize by ipm4
+            # normalize by ipm
             md.addarray('intensity',intensity)
             md.addarray('nevents',nevents[-1])
             if rank==1:

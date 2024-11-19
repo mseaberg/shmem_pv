@@ -14,7 +14,6 @@ def parse_config(configFile):
     pars = {}
     pars['exp_name'] = config.get('Main','exp_name')
     pars['hutch'] = config.get('Main','hutch')
-    pars['live'] = config.getboolean('Main','live')
     pars['update_events'] = config.getint('Update','update_events')
     xmin = config.getint('Processing','xmin')
     xmax = config.getint('Processing','xmax')
@@ -23,6 +22,7 @@ def parse_config(configFile):
     pars['pixel'] = config.getfloat('Setup','pixel')
     pars['roi'] = [xmin,xmax,ymin,ymax]
     pars['detName'] = config.get('Setup','detName')
+    pars['ipmName'] = config.get('Setup','ipmname')
     pars['energy'] = config.getfloat('Main','energy')
     pars['thresh'] = config.getint('Processing','thresh')
     pars['ipm_threshold'] = config.getint('Processing','ipm_threshold')
