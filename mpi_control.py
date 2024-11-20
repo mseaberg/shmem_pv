@@ -19,8 +19,9 @@ import argparse
 #import ConfigParser
 parser = argparse.ArgumentParser()
 parser.add_argument("-b","--hutch", help="hutch name",type=str)
-parser.add_argument("-r","--run", help="run number from DAQ")
+parser.add_argument("-r","--run", help="run number from DAQ",default="1",type=str)
 parser.add_argument("-n","--noe",help="number of events, all events=0",default=-1, type=int)
+parser.add_argument("-e","--experiment",help="experiment name",type=str)
 parser.add_argument("-c","--config",help="config file name",default='wfs',type=str)
 parser.add_argument("-s","--server",help="server name",type=str)
 parser.add_argument("-l","--live",help="run live",type=bool,default=False)

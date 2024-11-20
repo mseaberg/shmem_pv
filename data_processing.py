@@ -18,8 +18,8 @@ from psmon.plots import Image,XYPlot
 def runclient(args,pars,comm,rank,size):
 
     sh_mem = args.live
-    #expName = args.experiment
-    expName = pars['exp_name']
+    expName = args.experiment
+    #expName = pars['exp_name']
     #hutchName = args.hutch.lower()
     hutchName = expName[0:3]
     runNum = args.run
@@ -301,7 +301,7 @@ def runmaster(nClients,args,pars,comm,rank,size):
                         #circle *= 500
                         imPlot = Image(numEvents,"image",md.img+(circle),aspect_ratio=1)
                         #imPlot = Image(numEvents,"image",md.img)
-                        publish.send("test_image",imPlot)
+                        publish.send("centroid_image",imPlot)
                         print('sending image')
 
 
