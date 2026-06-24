@@ -215,11 +215,11 @@ def runmaster(nClients,args,pars,comm,rank,size):
 
     nevent = -1
 
-    cx_PV = epics.PV('XCS:USER:SND:X_CENTROID')
-    cy_PV = epics.PV('XCS:USER:SND:Y_CENTROID')
-    wx_PV = epics.PV('XCS:USER:SND:X_WIDTH')
-    wy_PV = epics.PV('XCS:USER:SND:Y_WIDTH')
-    intensity_PV = epics.PV('XCS:USER:SND:INTENSITY')
+    cx_PV = epics.PV('XCS:USER:SND:X_CENTROID_SHMEM')
+    cy_PV = epics.PV('XCS:USER:SND:Y_CENTROID_SHMEM')
+    wx_PV = epics.PV('XCS:USER:SND:X_WIDTH_SHMEM')
+    wy_PV = epics.PV('XCS:USER:SND:Y_WIDTH_SHMEM')
+    intensity_PV = epics.PV('XCS:USER:SND:INTENSITY_SHMEM')
 
     numEvents = 0
 
