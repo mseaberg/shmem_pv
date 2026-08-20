@@ -143,7 +143,7 @@ def runclient(args,pars,comm,rank,size):
             lineout_x = Util.get_horizontal_lineout(img1)
             lineout_y = Util.get_vertical_lineout(img1)
 
-            thresh2 = 100
+            thresh2 = 1000
             # disregard the centroid calculation if intensity is below the threshold
             if np.sum(img1)>thresh2:
                 cx, wx = gaussian_stats(x, lineout_x)
@@ -172,7 +172,7 @@ def runclient(args,pars,comm,rank,size):
             md.addarray('intensity',intensity)
             md.addarray('nevents',nevents[-1])
             if rank==1:
-                md.addarray('img',img0[ymin:ymax,xmin:xmax])
+                md.addarray('img',img1[ymin:ymax,xmin:xmax])
             md.small.event = nevent
            
             md.send()
@@ -193,14 +193,15 @@ def runmaster(nClients,args,pars,comm,rank,size):
     xmax = roi[1]
     ymin = roi[2]
     ymax = roi[3]
+    dx = pars['pixel']
 
     # initialize arrays
     N = ymax-ymin
     M = xmax-xmin
 
 
-    x = np.linspace(xmin,xmax,M)
-    y = np.linspace(ymin,ymax,N)
+    x = np.linspace(xmin,xmax,M)*dx*1e6
+    y = np.linspace(ymin,ymax,N)*dx*1e6
     x,y = np.meshgrid(x,y)
 
     N_event = 120
@@ -215,11 +216,11 @@ def runmaster(nClients,args,pars,comm,rank,size):
 
     nevent = -1
 
-    cx_PV = epics.PV('XCS:USER:SND:X_CENTROID')
-    cy_PV = epics.PV('XCS:USER:SND:Y_CENTROID')
-    wx_PV = epics.PV('XCS:USER:SND:X_WIDTH')
-    wy_PV = epics.PV('XCS:USER:SND:Y_WIDTH')
-    intensity_PV = epics.PV('XCS:USER:SND:INTENSITY')
+    cx_PV = epics.PV('XCS:USER:SND:X_CENTROID_SHMEM')
+    cy_PV = epics.PV('XCS:USER:SND:Y_CENTROID_SHMEM')
+    wx_PV = epics.PV('XCS:USER:SND:X_WIDTH_SHMEM')
+    wy_PV = epics.PV('XCS:USER:SND:Y_WIDTH_SHMEM')
+    intensity_PV = epics.PV('XCS:USER:SND:INTENSITY_SHMEM')
 
     numEvents = 0
 

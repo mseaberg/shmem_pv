@@ -22,10 +22,12 @@ def parse_config(configFile):
     pars['pixel'] = config.getfloat('Setup','pixel')
     pars['roi'] = [xmin,xmax,ymin,ymax]
     pars['detName'] = config.get('Setup','detName')
-    pars['ipmName'] = config.get('Setup','ipmname')
+    pars['ipmName'] = config.get('Setup','ipmName')
     pars['energy'] = config.getfloat('Main','energy')
     pars['thresh'] = config.getint('Processing','thresh')
     pars['ipm_threshold'] = config.getint('Processing','ipm_threshold')
+    #det_str = config.get('Setup','detnames')
+    #pars['detnames'] = [x.strip() for x in det_str.split(',')]
 
 
     return pars
